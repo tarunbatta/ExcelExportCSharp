@@ -1,3 +1,5 @@
 # battatech_ServerSideExcelExport
-Server side excel export plugin
-[Documentation] (http://battatech.com/blog/jquery-ui-compatible-tree-control.aspx)
+
+A server side excel export plugin written in C#.
+
+[Documentation] (http://battatech.com/blog.aspx)
