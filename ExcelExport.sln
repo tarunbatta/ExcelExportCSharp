@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{A4FA2B3A-31CD-43E0-AE45-E7E486E8E880}"
+	ProjectSection(SolutionItems) = preProject
+		Docs\OfficeXMLSDK.chm = Docs\OfficeXMLSDK.chm
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Code", "Code", "{55B93372-C731-412F-A51A-3C018253B23D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PL", "Code\PL\PL.csproj", "{65140165-35E2-4A0E-8988-D7D57C04510A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelExport", "Code\ExcelExport\ExcelExport.csproj", "{647A6D14-D152-4F9B-B2E6-0C8E6A1BBE98}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{65140165-35E2-4A0E-8988-D7D57C04510A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65140165-35E2-4A0E-8988-D7D57C04510A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65140165-35E2-4A0E-8988-D7D57C04510A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65140165-35E2-4A0E-8988-D7D57C04510A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{647A6D14-D152-4F9B-B2E6-0C8E6A1BBE98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{647A6D14-D152-4F9B-B2E6-0C8E6A1BBE98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{647A6D14-D152-4F9B-B2E6-0C8E6A1BBE98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{647A6D14-D152-4F9B-B2E6-0C8E6A1BBE98}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{65140165-35E2-4A0E-8988-D7D57C04510A} = {55B93372-C731-412F-A51A-3C018253B23D}
+		{647A6D14-D152-4F9B-B2E6-0C8E6A1BBE98} = {55B93372-C731-412F-A51A-3C018253B23D}
+	EndGlobalSection
+EndGlobal
