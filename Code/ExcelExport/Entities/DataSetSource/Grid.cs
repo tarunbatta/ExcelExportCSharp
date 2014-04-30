@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Web.UI.WebControls;
 
-namespace BattaTech.ExcelExport.Entities
+namespace BattaTech.ExcelExport.Entities.DataSetSource
 {
     public class Grid
     {

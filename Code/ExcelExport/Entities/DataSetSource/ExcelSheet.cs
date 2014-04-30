@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BattaTech.ExcelExport.Entities
+namespace BattaTech.ExcelExport.Entities.DataSetSource
 {
     public class ExcelSheet
     {

@@ -2,18 +2,23 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Data;
+using System.Drawing;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using BattaTech.ExcelExport.Entities;
-using System.Data;
-using System.Drawing;
+using BattaTech.ExcelExport.Entities.DataSetSource;
+using BattaTech.ExcelExport.Helper;
 
-namespace BattaTech.ExcelExport
+namespace BattaTech.ExcelExport.Manager
 {
-    public class GridExport
+    public class DataSetExport
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="excel"></param>
         public static void Export(ExcelSheet excel)
         {
             if (excel != null && !string.IsNullOrEmpty(excel.fileName) && excel.grids != null && excel.grids.Count > 0 &&
@@ -221,6 +226,8 @@ namespace BattaTech.ExcelExport
 
                         #endregion Creating Header Row
 
+                        #region Adding Rows
+
                         foreach (DataRow row in grid.dataTable.Rows)
                         {
                             result.Append("<Row>");
@@ -266,6 +273,8 @@ namespace BattaTech.ExcelExport
                             result.Append("</Row>");
                         }
 
+                        #endregion Adding Rows
+
                         result.Append("  </Table>");
                         result.Append("  <WorksheetOptions xmlns=\"urn:schemas-microsoft-com:office:excel\">");
 
@@ -308,25 +317,16 @@ namespace BattaTech.ExcelExport
                 result.Append("</Workbook>");
 
                 // Export to excel
-                GenerateExcel(excel.fileName, result.ToString());
+                Utility.GenerateExcel(excel.fileName, result.ToString());
             }
         }
 
-        private static void GenerateExcel(string fileName, string table)
-        {
-            if (!string.IsNullOrEmpty(fileName) && !string.IsNullOrEmpty(table))
-            {
-                HttpContext.Current.Response.Clear();
-
-                HttpContext.Current.Response.AddHeader("content-disposition", "attachment; filename=" + fileName + ".xls");
-                HttpContext.Current.Response.ContentType = "application/ms-excel";
-
-                HttpContext.Current.Response.Write(table);
-                HttpContext.Current.Response.End();
-            }
-        }
-
-        private static string GetExcelCompliantDataFormat(string input)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static string GetExcelCompliantDataFormat(string input)
         {
             string result = string.Empty;
 
@@ -338,7 +338,12 @@ namespace BattaTech.ExcelExport
             return result;
         }
 
-        private static string GetExcelCompliantDateFormat(DateTime dateTime)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dateTime"></param>
+        /// <returns></returns>
+        public static string GetExcelCompliantDateFormat(DateTime dateTime)
         {
             string result = string.Empty;
 
@@ -348,245 +353,5 @@ namespace BattaTech.ExcelExport
 
             return result;
         }
-
-        /*
-        private static Table GetTablularData(GridView gridView, int[] removeColumns, List<string> customHeaders)
-        {
-            Table table = new Table();
-
-            if (gridView != null && gridView.Rows.Count > 0)
-            {
-                if (gridView.AllowPaging == true)
-                {
-                    gridView.AllowPaging = false;
-                    gridView.DataBind();
-                }
-
-                if (removeColumns != null && removeColumns.Length > 0)
-                {
-                    Array.Sort<int>(removeColumns, new Comparison<int>((i1, i2) => i2.CompareTo(i1)));
-                }
-
-                table.BorderColor = System.Drawing.Color.Black;
-                table.BorderWidth = Unit.Pixel(1);
-
-                if (customHeaders != null && customHeaders.Count > 0)
-                {
-                    using (TableHeaderRow thr = new TableHeaderRow())
-                    {
-                        foreach (string item in customHeaders)
-                        {
-                            TableCell tc = new TableCell();
-
-                            tc.BackColor = System.Drawing.Color.Black;
-                            tc.BorderColor = System.Drawing.Color.Black;
-                            tc.BorderWidth = Unit.Pixel(1);
-                            tc.ForeColor = System.Drawing.Color.White;
-                            tc.Text = item;
-
-                            thr.Cells.Add(tc);
-                        }
-
-                        table.Rows.Add(thr);
-                    }
-                }
-
-                //  add the header row to the table
-                if (gridView.HeaderRow != null)
-                {
-                    GridExport.PrepareControlForExport(gridView.HeaderRow);
-                    GridViewRow gr = gridView.HeaderRow;
-
-                    if (removeColumns != null && removeColumns.Length > 0)
-                    {
-                        foreach (var item in removeColumns)
-                        {
-                            if (item <= gridView.Columns.Count)
-                            {
-                                gr.Cells.RemoveAt(item);
-                            }
-                        }
-                    }
-
-                    for (int i = 0; i < gr.Cells.Count; i++)
-                    {
-                        using (TableHeaderRow tr = new TableHeaderRow())
-                        {
-                            while (gr.Cells.Count > 0)
-                            {
-                                using (TableCell tc = gr.Cells[0])
-                                {
-                                    tc.BackColor = System.Drawing.Color.Black;
-                                    tc.BorderColor = System.Drawing.Color.Black;
-                                    tc.BorderWidth = Unit.Pixel(1);
-                                    tc.ForeColor = System.Drawing.Color.White;
-
-                                    tr.Cells.Add(tc);
-                                }
-                            }
-
-                            table.Rows.Add(tr);
-                        }
-                    }
-                }
-
-                //  add each of the data rows to the table
-                foreach (GridViewRow row in gridView.Rows)
-                {
-                    GridExport.PrepareControlForExport(row);
-                    GridViewRow gr = row;
-
-                    if (removeColumns != null && removeColumns.Length > 0)
-                    {
-                        foreach (var item in removeColumns)
-                        {
-                            if (item <= gridView.Columns.Count)
-                            {
-                                gr.Cells.RemoveAt(item);
-                            }
-                        }
-                    }
-
-                    for (int i = 0; i < gr.Cells.Count; i++)
-                    {
-                        using (TableRow tr = new TableRow())
-                        {
-                            while (gr.Cells.Count > 0)
-                            {
-                                using (TableCell tc = gr.Cells[0])
-                                {
-                                    tc.BorderColor = System.Drawing.Color.Black;
-                                    tc.BorderWidth = Unit.Pixel(1);
-
-                                    tr.Cells.Add(tc);
-                                }
-                            }
-
-                            table.Rows.Add(tr);
-                        }
-                    }
-                }
-
-                //  add the footer row to the table
-                if (gridView.FooterRow != null)
-                {
-                    GridExport.PrepareControlForExport(gridView.FooterRow);
-                    GridViewRow gr = gridView.FooterRow;
-
-                    if (removeColumns != null && removeColumns.Length > 0)
-                    {
-                        foreach (var item in removeColumns)
-                        {
-                            if (item <= gridView.Columns.Count)
-                            {
-                                gr.Cells.RemoveAt(item);
-                            }
-                        }
-                    }
-
-                    for (int i = 0; i < gr.Cells.Count; i++)
-                    {
-                        using (TableFooterRow tr = new TableFooterRow())
-                        {
-                            while (gr.Cells.Count > 0)
-                            {
-                                using (TableCell tc = gr.Cells[0])
-                                {
-                                    tc.BackColor = System.Drawing.Color.Black;
-                                    tc.BorderColor = System.Drawing.Color.Black;
-                                    tc.BorderWidth = Unit.Pixel(1);
-                                    tc.ForeColor = System.Drawing.Color.White;
-
-                                    tr.Cells.Add(tc);
-                                }
-                            }
-
-                            table.Rows.Add(tr);
-                        }
-                    }
-                }
-            }
-
-            return table;
-        }
-
-        private static void PrepareControlForExport(Control control)
-        {
-            for (int i = 0; i < control.Controls.Count; i++)
-            {
-                Control current = control.Controls[i];
-
-                if (current is LinkButton)
-                {
-                    control.Controls.Remove(current);
-                    control.Controls.AddAt(i, new LiteralControl((current as LinkButton).Text));
-                }
-                else if (current is Image)
-                {
-                    control.Controls.Remove(current);
-                    control.Controls.AddAt(i, new LiteralControl((current as Image).AlternateText));
-                }
-                else if (current is ImageButton)
-                {
-                    control.Controls.Remove(current);
-                    control.Controls.AddAt(i, new LiteralControl((current as ImageButton).AlternateText));
-                }
-                else if (current is HtmlImage)
-                {
-                    control.Controls.Remove(current);
-                    control.Controls.AddAt(i, new LiteralControl((current as HtmlImage).Alt));
-                }
-                else if (current is HyperLink)
-                {
-                    control.Controls.Remove(current);
-                    control.Controls.AddAt(i, new LiteralControl((current as HyperLink).Text));
-                }
-                else if (current is HtmlAnchor)
-                {
-                    control.Controls.Remove(current);
-                    control.Controls.AddAt(i, new LiteralControl((current as HtmlAnchor).Title));
-                }
-                else if (current is DropDownList)
-                {
-                    control.Controls.Remove(current);
-                    control.Controls.AddAt(i, new LiteralControl((current as DropDownList).SelectedItem.Text));
-                }
-                else if (current is CheckBox)
-                {
-                    control.Controls.Remove(current);
-                    control.Controls.AddAt(i, new LiteralControl((current as CheckBox).Checked ? "True" : "False"));
-                }
-
-                if (current.HasControls())
-                {
-                    GridExport.PrepareControlForExport(current);
-                }
-            }
-        }
-
-        private static string GetStringData(Table table)
-        {
-            string result = string.Empty;
-
-            if (table != null && table.Rows != null && table.Rows.Count > 0)
-            {
-                using (StringWriter sw = new StringWriter())
-                {
-                    using (HtmlTextWriter htw = new HtmlTextWriter(sw))
-                    {
-                        //  render the table into the htmlwriter
-                        table.RenderControl(htw);
-
-                        //  render the htmlwriter into the response
-                        result = sw.ToString();
-                    }
-                }
-            }
-
-            return result;
-        }
-
-        
-        */
     }
 }

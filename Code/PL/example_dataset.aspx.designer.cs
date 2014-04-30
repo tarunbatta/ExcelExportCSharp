@@ -10,24 +10,15 @@
 namespace BattaTech.ExcelExport.PL {
     
     
-    public partial class index {
+    public partial class example_dataset {
         
         /// <summary>
-        /// btnDataSet control.
+        /// btnExport control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnDataSet;
-        
-        /// <summary>
-        /// btnGridView control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnGridView;
+        protected global::System.Web.UI.WebControls.Button btnExport;
     }
 }

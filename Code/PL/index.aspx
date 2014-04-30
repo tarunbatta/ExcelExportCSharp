@@ -1,16 +1,11 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="index.aspx.cs" Inherits="BattaTech.ExcelExport.PL.index" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="index.aspx.cs" Inherits="BattaTech.ExcelExport.PL.index" %>
 
-<!DOCTYPE html>
-
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head runat="server">
-    <title></title>
-</head>
-<body>
-    <form id="form1" runat="server">
-        <div>
-            <asp:Button ID="btnExport" runat="server" Text="Export" OnClick="btnExport_Click" />
-        </div>
-    </form>
-</body>
-</html>
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+    <div>
+        <asp:Button ID="btnDataSet" runat="server" Text="DataSet Example" OnClick="btnDataSet_Click" />
+        <br />
+        <asp:Button ID="btnGridView" runat="server" Text="GridView Example" OnClick="btnGridView_Click" />
+    </div>
+</asp:Content>
