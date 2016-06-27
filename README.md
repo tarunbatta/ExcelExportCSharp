@@ -1,5 +1,5 @@
-# battatech_ServerSideExcelExport
+# Server Side Excel Export using C#
 
 A server side excel export plugin written in C#.
 
-[Documentation] (http://blog.battatech.com/how-to-export-to-excel-sheet-on-server-side/)
+[Documentation] (http://techbytarun.com/export-excel-sheet-using-c-sharp/)
