@@ -1,4 +1,4 @@
-# Server Side Excel Export using C#
+# Server Side Excel Export using C-Sharp
 
 A server side excel export plugin written in C#.
 
