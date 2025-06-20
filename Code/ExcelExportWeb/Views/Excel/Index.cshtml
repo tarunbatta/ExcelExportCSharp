@@ -1,0 +1,65 @@
+@{
+    ViewData["Title"] = "Excel Export";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Excel Export Demo</h1>
+    <p>Click the buttons below to export data to Excel files.</p>
+    
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Export Users Data</h5>
+                    <p class="card-text">Export user information including name, age, date of birth, and salary.</p>
+                    <form asp-action="ExportDataSet" method="post">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-download"></i> Export Users
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Export Games Data</h5>
+                    <p class="card-text">Export game information including name and popularity status.</p>
+                    <form asp-action="ExportGames" method="post">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-download"></i> Export Games
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="mt-4">
+        <div class="alert alert-info">
+            <h6>Sample Data Preview:</h6>
+            <p><strong>Users:</strong> Tarun Batta (30), Mickey Mouse (10)</p>
+            <p><strong>Games:</strong> LOL, Titan Fall, Mario Racing</p>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        transition: transform 0.2s;
+    }
+    
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    .btn {
+        transition: all 0.3s;
+    }
+    
+    .btn:hover {
+        transform: scale(1.05);
+    }
+</style> 
