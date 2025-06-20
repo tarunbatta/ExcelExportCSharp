@@ -244,7 +244,9 @@ namespace BattaTech.ExcelExport.Manager
 
                                         if (column != null && columnConfig.style != null)
                                         {
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
                                             string data = Convert.ToString(row[column]);
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
                                             int dataFormatStyleId = 0;
                                             string type = string.Empty;
 
