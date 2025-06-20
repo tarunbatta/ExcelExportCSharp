@@ -1083,7 +1083,8 @@ $.extend( $.validator, {
 			}
 
 			// Always apply ignore filter
-			return $( element ).not( this.settings.ignore )[ 0 ];
+			var sanitizedElement = this.escapeCssMeta(element);
+			return $( sanitizedElement ).not( this.settings.ignore )[ 0 ];
 		},
 
 		checkable: function( element ) {
