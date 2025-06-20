@@ -1,5 +1,53 @@
+# Build outputs
 bin/
-Properties/
 obj/
+Properties/
+
+# Visual Studio files
 *.csproj.user
 *.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.userprefs
+
+# IDE files
+.vs/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+*.cache
+*.bak
+*.orig
+
+# NuGet packages
+packages/
+*.nupkg
+
+# Local configuration files
+appsettings.Development.json
+appsettings.Local.json
+
+# Database files
+*.mdf
+*.ldf
+*.ndf
+
+# Backup files
+*.backup
+*.sql

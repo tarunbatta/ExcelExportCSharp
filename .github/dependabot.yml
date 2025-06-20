@@ -1,0 +1,50 @@
+# Dependabot configuration for ExcelExportCSharp
+# This file will automatically check for updates to NuGet packages
+
+version: 2
+updates:
+  # Enable version updates for NuGet packages
+  - package-ecosystem: "nuget"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "UTC"
+    # Group all NuGet updates together to reduce PR noise
+    groups:
+      nuget-dependencies:
+        patterns:
+          - "*"
+    # Only allow patch and minor updates to avoid breaking changes
+    allow:
+      - dependency-type: "direct"
+        update-types:
+          - "patch"
+          - "minor"
+    # Ignore major version updates that might break compatibility
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - "version-update:semver-major"
+    # Set commit message format
+    commit-message:
+      prefix: "nuget"
+      prefix-development: "nuget-dev"
+      include: "scope"
+    # Set PR title format
+    open-pull-requests-limit: 10
+    reviewers:
+      - "tarunbatta"
+    assignees:
+      - "tarunbatta"
+    labels:
+      - "dependencies"
+      - "nuget"
+    # Add PR body template
+    pull-request-branch-name:
+      separator: "-"
+    # Configure merge strategy
+    rebase-strategy: "auto"
+    # Set target branch
+    target-branch: "main"
