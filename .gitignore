@@ -51,3 +51,4 @@ appsettings.Local.json
 # Backup files
 *.backup
 *.sql
+.fake
