@@ -86,62 +86,62 @@ namespace BattaTech.ExcelExport.Manager
                         {
                             if (grid.columnsConfiguration != null && grid.columnsConfiguration.Count > 0)
                             {
-                                ColumnModel columnConfig = grid.columnsConfiguration.Find(x => x.columnName == column.ColumnName);
+                                ColumnModel? columnConfig = grid.columnsConfiguration.Find(x => x.columnName == column.ColumnName);
 
-                                if (columnConfig != null && !columnConfig.isHidden)
+                                if (columnConfig != null && !columnConfig.isHidden && columnConfig.style != null)
                                 {
-                                    var alreadyAddedStyle = alreadyAdded.Find(x => x.dataType == columnConfig.style.dataType && x.dataFormat == columnConfig.style.dataFormat);
+                                    var alreadyAddedStyle = alreadyAdded.Find(x => x.dataType == columnConfig.style!.dataType && x.dataFormat == columnConfig.style!.dataFormat);
 
                                     if (alreadyAddedStyle != null)
                                     {
-                                        columnConfig.style.dataFormatStyleId = alreadyAddedStyle.dataFormatStyleId;
+                                        columnConfig.style!.dataFormatStyleId = alreadyAddedStyle.dataFormatStyleId;
                                     }
                                     else
                                     {
-                                        if (columnConfig.style.dataType == typeof(int))
+                                        if (columnConfig.style!.dataType == typeof(int))
                                         {
                                             result.Append("<Style ss:ID=\"s" + styleId.ToString() + "\">");
                                             result.Append("<NumberFormat ss:Format=\"0\"/>");
                                             result.Append("<Alignment ss:Vertical=\"Bottom\" ss:WrapText=\"1\"/>");
                                             result.Append("</Style>");
 
-                                            columnConfig.style.dataFormatStyleId = styleId;
-                                            alreadyAdded.Add(columnConfig.style);
+                                            columnConfig.style!.dataFormatStyleId = styleId;
+                                            alreadyAdded.Add(columnConfig.style!);
 
                                             styleId++;
                                         }
-                                        else if (columnConfig.style.dataType == typeof(float) || columnConfig.style.dataType == typeof(double))
+                                        else if (columnConfig.style!.dataType == typeof(float) || columnConfig.style!.dataType == typeof(double))
                                         {
                                             result.Append("<Style ss:ID=\"s" + styleId.ToString() + "\">");
                                             result.Append("<NumberFormat ss:Format=\"Fixed\"/>");
                                             result.Append("<Alignment ss:Vertical=\"Bottom\" ss:WrapText=\"1\"/>");
                                             result.Append("</Style>");
 
-                                            columnConfig.style.dataFormatStyleId = styleId;
-                                            alreadyAdded.Add(columnConfig.style);
+                                            columnConfig.style!.dataFormatStyleId = styleId;
+                                            alreadyAdded.Add(columnConfig.style!);
 
                                             styleId++;
                                         }
-                                        else if (columnConfig.style.dataType == typeof(DateTime))
+                                        else if (columnConfig.style!.dataType == typeof(DateTime))
                                         {
-                                            if (string.IsNullOrEmpty(columnConfig.style.dataFormat))
+                                            if (string.IsNullOrEmpty(columnConfig.style!.dataFormat))
                                             {
-                                                columnConfig.style.dataFormat = "dd-MMM-yyyy";
+                                                columnConfig.style!.dataFormat = "dd-MMM-yyyy";
                                             }
 
                                             result.Append("<Style ss:ID=\"s" + styleId.ToString() + "\">");
-                                            result.Append("<NumberFormat ss:Format=\"[ENG][$-409]" + GetExcelCompliantDataFormat(columnConfig.style.dataFormat) + ";@\"/>");
+                                            result.Append("<NumberFormat ss:Format=\"[ENG][$-409]" + GetExcelCompliantDataFormat(columnConfig.style!.dataFormat!) + ";@\"/>");
                                             result.Append("<Alignment ss:Vertical=\"Bottom\" ss:WrapText=\"1\"/>");
                                             result.Append("</Style>");
 
-                                            columnConfig.style.dataFormatStyleId = styleId;
-                                            alreadyAdded.Add(columnConfig.style);
+                                            columnConfig.style!.dataFormatStyleId = styleId;
+                                            alreadyAdded.Add(columnConfig.style!);
 
                                             styleId++;
                                         }
                                         else
                                         {
-                                            columnConfig.style.dataFormatStyleId = excel.defaultStyleId;
+                                            columnConfig.style!.dataFormatStyleId = excel.defaultStyleId;
                                         }
                                     }
                                 }
@@ -188,13 +188,16 @@ namespace BattaTech.ExcelExport.Manager
 
                         #region Setting Column Width
 
-                        foreach (ColumnModel columnConfig in grid.columnsConfiguration)
+                        if (grid.columnsConfiguration != null)
                         {
-                            if (!string.IsNullOrEmpty(columnConfig.columnName) && !columnConfig.isHidden)
+                            foreach (ColumnModel columnConfig in grid.columnsConfiguration)
                             {
-                                if (grid.dataTable.Columns[columnConfig.columnName] != null)
+                                if (columnConfig.columnName is string columnName && columnName.Length > 0 && !columnConfig.isHidden)
                                 {
-                                    result.Append(string.Concat("<Column ss:AutoFitWidth=\"0\" ss:Width=\"", columnConfig.columnWidth, "\" />"));
+                                    if (grid.dataTable.Columns[columnName] != null)
+                                    {
+                                        result.Append(string.Concat("<Column ss:AutoFitWidth=\"0\" ss:Width=\"", columnConfig.columnWidth, "\" />"));
+                                    }
                                 }
                             }
                         }
@@ -205,15 +208,18 @@ namespace BattaTech.ExcelExport.Manager
 
                         result.Append("<Row>");
 
-                        foreach (ColumnModel columnConfig in grid.columnsConfiguration)
+                        if (grid.columnsConfiguration != null)
                         {
-                            if (!string.IsNullOrEmpty(columnConfig.columnName) && !columnConfig.isHidden)
+                            foreach (ColumnModel columnConfig in grid.columnsConfiguration)
                             {
-                                DataColumn column = grid.dataTable.Columns[columnConfig.columnName];
-
-                                if (column != null)
+                                if (columnConfig.columnName is string columnName && columnName.Length > 0 && !columnConfig.isHidden)
                                 {
-                                    result.Append(string.Concat("<Cell ss:StyleID=\"s", grid.headerStyleId, "\"><Data ss:Type=\"String\">", columnConfig.headerText, "</Data></Cell>"));
+                                    DataColumn? column = grid.dataTable.Columns[columnName];
+
+                                    if (column != null)
+                                    {
+                                        result.Append(string.Concat("<Cell ss:StyleID=\"s", grid.headerStyleId, "\"><Data ss:Type=\"String\">", columnConfig.headerText ?? "", "</Data></Cell>"));
+                                    }
                                 }
                             }
                         }
@@ -228,40 +234,43 @@ namespace BattaTech.ExcelExport.Manager
                         {
                             result.Append("<Row>");
 
-                            foreach (ColumnModel columnConfig in grid.columnsConfiguration)
+                            if (grid.columnsConfiguration != null)
                             {
-                                if (!string.IsNullOrEmpty(columnConfig.columnName) && !columnConfig.isHidden)
+                                foreach (ColumnModel columnConfig in grid.columnsConfiguration)
                                 {
-                                    DataColumn column = grid.dataTable.Columns[columnConfig.columnName];
-
-                                    if (column != null)
+                                    if (columnConfig.columnName is string columnName && columnName.Length > 0 && !columnConfig.isHidden)
                                     {
-                                        string data = Convert.ToString(row[column]);
-                                        int dataFormatStyleId = 0;
-                                        string type = string.Empty;
+                                        DataColumn? column = grid.dataTable.Columns[columnName];
 
-                                        if (columnConfig.style.dataFormatStyleId > 0)
+                                        if (column != null && columnConfig.style != null)
                                         {
-                                            dataFormatStyleId = columnConfig.style.dataFormatStyleId;
+                                            string data = Convert.ToString(row[column]);
+                                            int dataFormatStyleId = 0;
+                                            string type = string.Empty;
 
-                                            if (columnConfig.style.dataType == typeof(int) || columnConfig.style.dataType == typeof(float) || columnConfig.style.dataType == typeof(double))
+                                            if (columnConfig.style.dataFormatStyleId > 0)
                                             {
-                                                type = "Number";
+                                                dataFormatStyleId = columnConfig.style.dataFormatStyleId;
+
+                                                if (columnConfig.style.dataType == typeof(int) || columnConfig.style.dataType == typeof(float) || columnConfig.style.dataType == typeof(double))
+                                                {
+                                                    type = "Number";
+                                                }
+                                                else if (columnConfig.style.dataType == typeof(DateTime))
+                                                {
+                                                    type = "DateTime";
+                                                    data = GetExcelCompliantDateFormat((DateTime)row[column]);
+                                                }
+                                                else
+                                                {
+                                                    type = "String";
+                                                }
                                             }
-                                            else if (columnConfig.style.dataType == typeof(DateTime))
-                                            {
-                                                type = "DateTime";
-                                                data = GetExcelCompliantDateFormat((DateTime)row[column]);
-                                            }
-                                            else
-                                            {
-                                                type = "String";
-                                            }
+
+                                            result.Append(string.Concat("<Cell ss:StyleID=\"s", dataFormatStyleId, "\">"));
+                                            result.Append(string.Concat("<Data ss:Type=\"", type, "\">", data, "</Data>"));
+                                            result.Append("</Cell>");
                                         }
-
-                                        result.Append(string.Concat("<Cell ss:StyleID=\"s", dataFormatStyleId, "\">"));
-                                        result.Append(string.Concat("<Data ss:Type=\"", type, "\">", data, "</Data>"));
-                                        result.Append("</Cell>");
                                     }
                                 }
                             }
