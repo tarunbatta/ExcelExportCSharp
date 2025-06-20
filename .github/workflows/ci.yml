@@ -1,0 +1,77 @@
+name: CI
+
+on:
+  push:
+    branches: ["master", "main", "develop"]
+  pull_request:
+    branches: ["master", "main"]
+
+jobs:
+  build:
+    name: Build and Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "9.0.x"
+
+      - name: Restore dependencies
+        run: dotnet restore ExcelExport.sln
+
+      - name: Build
+        run: dotnet build ExcelExport.sln --no-restore --configuration Release
+
+      - name: Test
+        run: dotnet test ExcelExport.sln --no-build --verbosity normal --configuration Release
+
+      - name: Run Code Analysis
+        run: dotnet build ExcelExport.sln --no-restore --configuration Release /p:TreatWarningsAsErrors=true
+
+  build-windows:
+    name: Build on Windows
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "9.0.x"
+
+      - name: Restore dependencies
+        run: dotnet restore ExcelExport.sln
+
+      - name: Build
+        run: dotnet build ExcelExport.sln --no-restore --configuration Release
+
+      - name: Test
+        run: dotnet test ExcelExport.sln --no-build --verbosity normal --configuration Release
+
+  build-macos:
+    name: Build on macOS
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "9.0.x"
+
+      - name: Restore dependencies
+        run: dotnet restore ExcelExport.sln
+
+      - name: Build
+        run: dotnet build ExcelExport.sln --no-restore --configuration Release
+
+      - name: Test
+        run: dotnet test ExcelExport.sln --no-build --verbosity normal --configuration Release
